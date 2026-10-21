@@ -1,5 +1,10 @@
 
-# Playwright
+# Environment variables and secrets
+.env
+.env.*
+!.env.example
+
+# Playwright artifacts
 node_modules/
 /test-results/
 /playwright-report/

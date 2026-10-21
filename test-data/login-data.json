@@ -1,0 +1,15 @@
+
+{
+  "invalidCredentials": [
+    {
+      "email": "wrong@learnhub.dev",
+      "password": "WrongPass123",
+      "expectedMessage": "Incorrect email or password"
+    },
+    {
+      "email": "",
+      "password": "",
+      "expectedMessage": "required"
+    }
+  ]
+}
