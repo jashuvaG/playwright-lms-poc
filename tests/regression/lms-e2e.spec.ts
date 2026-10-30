@@ -32,15 +32,27 @@ test('Learner can complete a course and pass the final quiz', async ({ page }) =
   await coursePage.completeAllLessons();
 
   // 4. Open the final quiz
-  const quizUrl = await coursePage.startQuizLink.getAttribute('href');
-  expect(quizUrl, 'Quiz link should have a URL').toBeTruthy();
-  await page.goto(quizUrl!);
+  
+// 4. Open the final quiz through the unlocked control
+await expect(coursePage.startQuizLink).toBeVisible();
+await expect(coursePage.startQuizLink).toBeEnabled();
 
-  // Temporary check: verify the quiz is displayed.
-  // Next, we will automate the quiz answers and certificate.
 
-  // 5. Answer and submit the quiz
-  await expect(page.getByTestId('submit-quiz')).toBeVisible();
+await expect(coursePage.startQuizLink).toHaveAttribute(
+  'href',
+  `/apps/lms/course/${lmsTestData.courseId}/quiz`
+);
+
+await coursePage.startQuizLink.click();
+
+await expect(page).toHaveURL(
+  new RegExp(`/apps/lms/course/${lmsTestData.courseId}/quiz$`),
+  { timeout: 15000 }
+);
+
+await expect(page.getByTestId('submit-quiz')).toBeVisible();
+
+
   await quizPage.answerAllQuestions();
   await quizPage.submitAnswers();
 
@@ -54,7 +66,7 @@ test('Learner can complete a course and pass the final quiz', async ({ page }) =
   const questions = page.locator('[data-testid^="question-"]');
 const questionCount = await questions.count();
 
-console.log(`Total quiz questions: ${questionCount}`);
+// console.log(`Total quiz questions: ${questionCount}`);
 
 for (let i = 0; i < questionCount; i++) {
   const question = questions.nth(i);
